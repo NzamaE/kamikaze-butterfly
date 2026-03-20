@@ -244,7 +244,7 @@ export function AdminDashboardScreen() {
                 <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mt-1">Public Plans</p>
               </div>
             </div>
-            <Button variant="outline" className="w-full gap-2 group">
+            <Button  variant="outline" className="w-full gap-2 group">
               Manage Platform
               <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Button>
