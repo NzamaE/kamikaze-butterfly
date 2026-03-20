@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import pool from './db/index';
+import authRoutes from './routes/auth';
 
 dotenv.config();
 
@@ -11,7 +12,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
-// Health check
+app.use('/api/auth', authRoutes);
+
 app.get('/api/health', async (req, res) => {
   try {
     await pool.query('SELECT NOW()');
