@@ -1,4 +1,4 @@
-# 💍 Kamikaze Butterfly Weddings
+# Kamikaze Butterfly Weddings
 
 > A full-stack wedding planning platform connecting couples, vendors, and event coordinators in one seamless experience.
 
@@ -10,15 +10,15 @@
 
 ---
 
-## 📌 Overview
+##  Overview
 
 Kamikaze Butterfly Weddings is a two-part system designed to take the chaos out of wedding planning. Couples get a personalized planning experience, vendors get a professional profile and booking management tool, and the event coordinator gets full visibility over everything.
 
 ---
 
-## ✨ Features
+##  Features
 
-### 👫 For Couples (Clients)
+###  For Couples (Clients)
 - Create and manage a personalized wedding plan
 - Interactive checklist (venue, catering, photography, decor & more)
 - Smart vendor suggestions based on theme, location & budget
@@ -26,13 +26,13 @@ Kamikaze Butterfly Weddings is a two-part system designed to take the chaos out 
 - Invoice generation on service requests
 - Option to make completed plans public for others to reference
 
-### 🏢 For Vendors
+### For Vendors
 - Create and manage a detailed service profile
 - Availability calendar that auto-updates on confirmed bookings
 - Accept or reject service requests from clients
 - Track earnings and client metrics from a personal dashboard
 
-### 👑 For Admin (Event Coordinator)
+### For Admin (Event Coordinator)
 - Full overview dashboard — clients, vendors, plans, revenue
 - Vendor verification and approval workflow
 - Remove or manage vendors on the platform
@@ -40,7 +40,7 @@ Kamikaze Butterfly Weddings is a two-part system designed to take the chaos out 
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -54,7 +54,7 @@ Kamikaze Butterfly Weddings is a two-part system designed to take the chaos out 
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 kamikaze-butterfly/
@@ -80,7 +80,7 @@ kamikaze-butterfly/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js v18+
@@ -120,7 +120,7 @@ npm run db:seed   # optional — loads sample data
 
 ---
 
-## 🔐 Environment Variables
+## Environment Variables
 
 ### Server (`server/.env`)
 ```env
@@ -138,7 +138,7 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-## 🗺 Roadmap
+##  Roadmap
 
 - [x] Project setup & repo structure
 - [ ] Database schema design
@@ -153,7 +153,7 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Ernest Nzama**  
 Full-Stack Developer | BSc Computer Science & Informatics  
@@ -161,6 +161,6 @@ Full-Stack Developer | BSc Computer Science & Informatics
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
