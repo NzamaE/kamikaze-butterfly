@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import pool from './db/index';
 import authRoutes from './routes/auth';
 import planRoutes from './routes/plans';
+import vendorRoutes from './routes/vendors';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/plans', planRoutes);
+app.use('/api/vendors', vendorRoutes);
 
 app.get('/api/health', async (req, res) => {
   try {
