@@ -76,6 +76,8 @@ kamikaze-butterfly/
     │   ├── db/               # Database connection & queries
     │   └── types/            # Shared TypeScript types
     └── .env.example
+├── docs/
+   └── database-schema.pdf 
 ```
 
 ---
