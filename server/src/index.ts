@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import pool from './db/index';
 import authRoutes from './routes/auth';
+import planRoutes from './routes/plans';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/plans', planRoutes);
 
 app.get('/api/health', async (req, res) => {
   try {
