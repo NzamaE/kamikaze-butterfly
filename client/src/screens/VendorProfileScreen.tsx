@@ -6,7 +6,7 @@ import { Badge } from "../components/Badge";
 import { Star, MapPin, Calendar, Heart, Share2, ChevronLeft, CheckCircle2 } from "lucide-react";
 import { MOCK_VENDORS } from "../constants";
 
-export function VendorProfileScreen({ onBack, onBook }: { onBack: () => void; onBook: () => void }) {
+export function VendorProfileScreen({ onBack, onBook, vendorId }: { onBack: () => void; onBook: () => void; vendorId?: string }) {
   const vendor = MOCK_VENDORS[0];
 
   return (

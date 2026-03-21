@@ -196,7 +196,7 @@ export function AdminVerificationScreen() {
               </div>
             ) : pendingVendors.length === 0 ? (
               <Card variant="tonal" className="text-center py-8 space-y-2">
-                <p className="text-2xl">✅</p>
+                <p className="text-2xl"></p>
                 <p className="font-bold text-sm">All caught up!</p>
                 <p className="text-xs text-on-surface-variant">No pending vendor approvals</p>
               </Card>
