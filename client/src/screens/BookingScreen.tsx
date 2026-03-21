@@ -14,6 +14,7 @@ interface BookingScreenProps {
 
 export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) {
   const [date, setDate] = React.useState('');
+  const [time, setTime] = React.useState('14:00');
   const [notes, setNotes] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -24,21 +25,14 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get vendor details
         if (vendorId) {
           const vendorData = await vendorsAPI.getById(vendorId);
           setVendor(vendorData);
-        }
 
-        // Get client's first plan and matching checklist item
-        const plans = await plansAPI.getAll();
-        if (plans.length > 0) {
-          const fullPlan = await plansAPI.getById(plans[0].id);
-          setPlan(fullPlan);
-
-          // Find checklist item matching vendor service type
-          if (vendorId) {
-            const vendorData = await vendorsAPI.getById(vendorId);
+          const plans = await plansAPI.getAll();
+          if (plans.length > 0) {
+            const fullPlan = await plansAPI.getById(plans[0].id);
+            setPlan(fullPlan);
             const matchingItem = fullPlan.checklist?.find(
               (item: any) => item.category === vendorData.service_type && item.status === 'pending'
             );
@@ -49,12 +43,12 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
         console.error('Failed to load booking data');
       }
     };
-
     fetchData();
   }, [vendorId]);
 
-  const serviceFee = vendor ? Number(vendor.base_price) * 0.1 : 0;
-  const total = vendor ? Number(vendor.base_price) + serviceFee : 0;
+  const serviceFee = vendor ? Number(vendor.base_price) * 0.1 : 250;
+  const basePrice = vendor ? Number(vendor.base_price) : 2500;
+  const total = basePrice + serviceFee;
 
   const handleSubmit = async () => {
     if (!date) {
@@ -65,10 +59,8 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
       setError('Missing booking details. Please go back and try again.');
       return;
     }
-
     setLoading(true);
     setError('');
-
     try {
       await requestsAPI.create({
         vendor_id: vendorId,
@@ -105,6 +97,7 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
 
         <div className="space-y-8">
           <div className="grid sm:grid-cols-2 gap-6">
+            {/* Date picker */}
             <div className="space-y-4">
               <label className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">
                 Select Date
@@ -120,33 +113,35 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
                 />
               </div>
             </div>
+
+            {/* Time picker */}
             <div className="space-y-4">
               <label className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">
-                Vendor Service
+                Select Time
               </label>
-              <div className="w-full bg-surface-container-low border border-transparent rounded-xl px-4 py-3 text-on-surface capitalize">
-                {vendor?.service_type || 'Loading...'}
+              <div className="relative group">
+                <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary transition-colors" size={18} />
+                <input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="w-full bg-surface-container-low border border-transparent rounded-xl pl-12 pr-4 py-3 text-on-surface transition-all focus:bg-surface-container focus:border-primary/20 focus:ring-2 focus:ring-primary/5 outline-none"
+                />
               </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">
-              Special Requests
-            </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Tell the vendor about your vision, color palettes, or any special requirements..."
-              rows={4}
-              className="w-full bg-surface-container-low border border-transparent rounded-xl px-4 py-3 text-on-surface transition-all focus:bg-surface-container focus:border-primary/20 focus:ring-2 focus:ring-primary/5 outline-none resize-none"
-            />
-          </div>
+          <Textarea
+            label="Specific Requests"
+            placeholder="Tell the artist about your vision, color palettes, or any special requirements..."
+            value={notes}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNotes(e.target.value)}
+          />
 
-          {/* Vendor availability notice */}
-          {vendor?.availability?.length > 0 && (
-            <div className="p-4 bg-surface-container-low rounded-2xl space-y-2">
-              <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">
+          {/* Available dates hint */}
+          {vendor?.availability?.filter((a: any) => !a.is_booked).length > 0 && (
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">
                 Available Dates
               </p>
               <div className="flex flex-wrap gap-2">
@@ -157,13 +152,13 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
                     <button
                       key={a.id}
                       onClick={() => setDate(a.date.split('T')[0])}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                         date === a.date.split('T')[0]
-                          ? 'bg-primary text-on-primary'
-                          : 'bg-surface-container text-on-surface-variant hover:bg-primary/10'
+                          ? 'bg-primary text-on-primary shadow-lg shadow-primary/20'
+                          : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'
                       }`}
                     >
-                      {new Date(a.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' })}
+                      {new Date(a.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </button>
                   ))}
               </div>
@@ -198,19 +193,21 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
         </div>
       </div>
 
-      {/* Sidebar summary */}
+      {/* Sidebar — original design preserved */}
       <aside className="space-y-6">
         <Card variant="tonal" className="sticky top-12 space-y-6">
           <div className="aspect-video rounded-2xl overflow-hidden">
             <img
-              src={`https://picsum.photos/seed/${vendorId || 'vendor'}/400/300`}
-              alt="Vendor"
+              src={`https://picsum.photos/seed/${vendorId || 'flowers'}/400/300`}
+              alt="Service"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-bold">{vendor?.vendor_name || 'Loading...'}</h3>
+            <h3 className="text-xl font-bold">
+              {vendor?.vendor_name || 'Loading...'}
+            </h3>
             <p className="text-sm text-on-surface-variant capitalize">
               {vendor?.service_type || ''} services
             </p>
@@ -218,8 +215,8 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
 
           <div className="space-y-4 pt-4 border-t border-surface-container-highest">
             <div className="flex justify-between text-sm">
-              <span className="text-on-surface-variant">Base Price</span>
-              <span className="font-bold">R{Number(vendor?.base_price || 0).toLocaleString()}</span>
+              <span className="text-on-surface-variant">Base Investment</span>
+              <span className="font-bold">R{basePrice.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-on-surface-variant">Service Fee (10%)</span>
@@ -230,17 +227,6 @@ export function BookingScreen({ onBack, onNext, vendorId }: BookingScreenProps) 
               <span className="text-primary">R{total.toLocaleString()}</span>
             </div>
           </div>
-
-          {date && (
-            <div className="flex items-center gap-3 p-4 bg-surface-container-low rounded-2xl text-xs text-on-surface-variant">
-              <Clock size={20} className="text-primary shrink-0" />
-              <span>
-                Requested for {new Date(date).toLocaleDateString('en-ZA', {
-                  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                })}
-              </span>
-            </div>
-          )}
 
           <div className="flex items-center gap-3 p-4 bg-surface-container-low rounded-2xl text-xs text-on-surface-variant leading-relaxed">
             <CreditCard size={20} className="text-primary shrink-0" />
